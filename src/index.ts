@@ -8,6 +8,14 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
-app.listen(3000, () => {
-  console.log("server started");
-});
+const startServer = async () => {
+  try {
+    app.listen(3000, () => {
+      console.log("server started");
+    });
+  } catch (err) {
+    console.warn("Error in staring server");
+  }
+};
+
+startServer();
