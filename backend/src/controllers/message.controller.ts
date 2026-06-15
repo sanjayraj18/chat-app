@@ -6,9 +6,9 @@ const messageService = new MessageService();
 export const sendDirectMessage = async (req: Request, res: Response) => {
   const { senderId, receiverId, message } = req.body;
   const result = await messageService.saveDirectMessage(
-    senderId,
-    receiverId,
-    message,
+    senderId as string,
+    receiverId as string,
+    message as string,
   );
 
   const io = req.app.get("io");
@@ -33,7 +33,6 @@ export const getDirectMessage = async (req: Request, res: Response) => {
   );
 
   res.status(201).json(messages);
-  const {} = req.body;
 };
 
 export const getChatList = async (req: Request, res: Response) => {

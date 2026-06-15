@@ -1,4 +1,5 @@
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import { createServer } from "node:http";
@@ -7,12 +8,25 @@ import messageRoutes from "./routes/message.routes";
 import { setupChatSockets } from "./sockets/chat.socket";
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, { cors: { origin: "*" } });
 
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 app.use("/api/messages", messageRoutes);
 
