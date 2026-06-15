@@ -37,3 +37,29 @@ export const getDirectMessage = async (req: Request, res: Response) => {
   });
   const {} = req.body;
 };
+
+export const getChatList = async (req: Request, res: Response) => {
+  const { userId } = req.query;
+  const chatList = await messageService.getRecentChats(userId as string);
+
+  res.json(chatList);
+};
+
+export const sendGroupMessage = async (req: Request, res: Response) => {
+  const { senderId, groupId, message } = req.body;
+
+  const result = await messageService.saveGroupMessage(
+    senderId,
+    groupId,
+    message,
+  );
+
+  const io = req.app.get("io");
+  if (io) {
+    io.to(`group_${groupId}`).emit("new_group_message", result);
+  }
+
+  res.status(201).json({
+    result,
+  });
+};
