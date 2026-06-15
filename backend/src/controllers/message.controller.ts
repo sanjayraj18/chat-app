@@ -14,7 +14,7 @@ export const sendDirectMessage = async (req: Request, res: Response) => {
   const io = req.app.get("io");
 
   if (io) {
-    io.to(`user_{receiverId}`).emit("new_message", result);
+    io.to(`user_${receiverId}`).emit("new_message", result);
   }
 
   res.status(201).json(result);
@@ -32,9 +32,7 @@ export const getDirectMessage = async (req: Request, res: Response) => {
     userB as string,
   );
 
-  res.status(201).json({
-    messages,
-  });
+  res.status(201).json(messages);
   const {} = req.body;
 };
 
